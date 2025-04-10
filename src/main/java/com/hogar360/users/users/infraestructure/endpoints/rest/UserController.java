@@ -1,5 +1,6 @@
 package com.hogar360.users.users.infraestructure.endpoints.rest;
 
+import com.hogar360.users.commons.configurations.config.ControllerConstants;
 import com.hogar360.users.commons.configurations.config.UserControllerDocs.CreateUserDocs;
 import com.hogar360.users.users.application.dto.request.SaveUserRequest;
 import com.hogar360.users.users.application.dto.response.SaveUserResponse;
@@ -11,15 +12,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping(ControllerConstants.BASE_URL)
+
 @RequiredArgsConstructor
-@Tag(name = "Usuarios", description = "Operaciones relacionadas con los usuarios")
+@Tag(name = ControllerConstants.TAG, description = ControllerConstants.TAG_DESCRIPTION)
 public class UserController {
 
     private final UserService userService;
 
     @CreateUserDocs
-    @PostMapping("/")
+    @PostMapping(ControllerConstants.SAVE_PATH)
     public ResponseEntity<SaveUserResponse> saveUser(@RequestBody SaveUserRequest request) {
         SaveUserResponse response = userService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
