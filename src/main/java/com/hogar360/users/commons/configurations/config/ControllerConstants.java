@@ -10,4 +10,5 @@ public class ControllerConstants {
     public static final String SAVE_PATH = "/";
     public static final String TAG = "Usuarios";
     public static final String TAG_DESCRIPTION = "Operaciones relacionadas con los usuarios";
+    public static final String LOGIN_PATH = "/auth/login";
 }

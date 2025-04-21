@@ -1,11 +1,10 @@
-package com.hogar360.users.users.infraestructure.adapters.persistence;
+package com.hogar360.users.users.infrastructure.adapters.persistence;
 
-import com.hogar360.users.commons.configurations.utils.EncryptPasswordUtil;
 import com.hogar360.users.users.domain.model.UserModel;
 import com.hogar360.users.users.domain.ports.out.UserPersistencePort;
-import com.hogar360.users.users.infraestructure.entities.UserEntity;
-import com.hogar360.users.users.infraestructure.mappers.UserEntityMapper;
-import com.hogar360.users.users.infraestructure.repositories.mysql.UserRepository;
+import com.hogar360.users.users.infrastructure.entities.UserEntity;
+import com.hogar360.users.users.infrastructure.mappers.UserEntityMapper;
+import com.hogar360.users.users.infrastructure.repositories.mysql.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

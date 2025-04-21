@@ -1,6 +1,6 @@
-package com.hogar360.users.users.infraestructure.repositories.mysql;
+package com.hogar360.users.users.infrastructure.repositories.mysql;
 
-import com.hogar360.users.users.infraestructure.entities.UserEntity;
+import com.hogar360.users.users.infrastructure.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

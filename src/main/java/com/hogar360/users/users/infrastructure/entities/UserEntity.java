@@ -1,4 +1,4 @@
-package com.hogar360.users.users.infraestructure.entities;
+package com.hogar360.users.users.infrastructure.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

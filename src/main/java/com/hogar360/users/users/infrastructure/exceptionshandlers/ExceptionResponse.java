@@ -1,4 +1,4 @@
-package com.hogar360.users.users.infraestructure.exceptionshandlers;
+package com.hogar360.users.users.infrastructure.exceptionshandlers;
 
 import java.time.LocalDateTime;
 

@@ -2,7 +2,9 @@ package com.hogar360.users.commons.configurations.config;
 
 public class SwaggerExamples {
 
-    private SwaggerExamples() {}
+    private SwaggerExamples() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static final String CREATE_USER_REQUEST = """
         {
@@ -30,5 +32,26 @@ public class SwaggerExamples {
           "time": "2025-04-07T12:01:00"
         }
     """;
+
+    public static final String AUTHENTICATION_REQUEST = """
+    {
+       "email": "Marian.perez@example.com",
+       "password": "password123"
+    }
+""";
+
+    public static final String AUTHENTICATION_RESPONSE = """
+    {
+      "token": "eyJhbGciOiJIUzI1NiJ9..."
+    }
+""";
+
+    public static final String AUTHENTICATION_ERROR_RESPONSE = """
+    {
+      "message": "Invalid email or password.",
+      "time": "2025-04-07T12:10:00"
+    }
+""";
+
 }
 
