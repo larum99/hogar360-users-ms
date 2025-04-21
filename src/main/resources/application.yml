@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8091
 
 spring:
   application:
@@ -21,3 +21,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui
     enabled: true
+
+security:
+  jwt:
+    secret: ${JWT_SECRET_KEY}
+    expiration-millis: ${JWT_EXPIRATION_MILLIS:180000}

@@ -1,4 +1,4 @@
-package com.hogar360.users.users.infraestructure.adapters.encoders;
+package com.hogar360.users.users.infrastructure.adapters.encoders;
 
 import com.hogar360.users.users.domain.ports.out.PasswordEncoderPort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,5 +15,10 @@ public class PasswordEncoderAdapter implements PasswordEncoderPort {
     @Override
     public String encode(String password) {
         return encoder.encode(password);
+    }
+
+    @Override
+    public boolean matches(String rawPassword, String encodedPassword) {
+        return encoder.matches(rawPassword, encodedPassword);
     }
 }

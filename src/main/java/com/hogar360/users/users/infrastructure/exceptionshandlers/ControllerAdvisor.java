@@ -1,4 +1,4 @@
-package com.hogar360.users.users.infraestructure.exceptionshandlers;
+package com.hogar360.users.users.infrastructure.exceptionshandlers;
 
 import com.hogar360.users.users.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
@@ -47,6 +47,14 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleUserAlreadyExists(UserAlreadyExistsException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(
                 ExceptionConstants.USER_ALREADY_EXISTS_MESSAGE,
+                LocalDateTime.now()
+        ));
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ExceptionResponse> handleForbidden(ForbiddenException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(
+                ExceptionConstants.FORBIDDEN_MESSAGE,
                 LocalDateTime.now()
         ));
     }

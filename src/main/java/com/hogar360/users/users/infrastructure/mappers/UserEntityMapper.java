@@ -1,7 +1,7 @@
-package com.hogar360.users.users.infraestructure.mappers;
+package com.hogar360.users.users.infrastructure.mappers;
 
 import com.hogar360.users.users.domain.model.UserModel;
-import com.hogar360.users.users.infraestructure.entities.UserEntity;
+import com.hogar360.users.users.infrastructure.entities.UserEntity;
 import org.mapstruct.Mapper;
 
 import java.util.Optional;

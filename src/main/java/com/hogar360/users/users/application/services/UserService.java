@@ -4,5 +4,5 @@ import com.hogar360.users.users.application.dto.request.SaveUserRequest;
 import com.hogar360.users.users.application.dto.response.SaveUserResponse;
 
 public interface UserService {
-    SaveUserResponse save(SaveUserRequest request);
+    SaveUserResponse save(SaveUserRequest request, String token);
 }
