@@ -1,10 +1,8 @@
 package com.hogar360.users.users.domain.usecases;
 
 import com.hogar360.users.users.application.dto.request.AuthenticationRequest;
-import com.hogar360.users.users.application.dto.response.AuthenticationResponse;
 import com.hogar360.users.users.domain.exceptions.InvalidCredentialsException;
 import com.hogar360.users.users.domain.model.UserModel;
-import com.hogar360.users.users.domain.ports.out.AuthenticationPersistencePort;
 import com.hogar360.users.users.domain.ports.out.PasswordEncoderPort;
 import com.hogar360.users.users.domain.ports.out.UserPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +24,6 @@ class AuthenticationUseCaseTest {
     @Mock
     private PasswordEncoderPort passwordEncoderPort;
 
-    @Mock
-    private AuthenticationPersistencePort authenticationPersistencePort;
-
     @InjectMocks
     private AuthenticationUseCase authenticationUseCase;
 
@@ -36,11 +31,9 @@ class AuthenticationUseCaseTest {
     private UserModel userModel;
     private final String rawPassword = "plainPassword123";
     private final String hashedPassword = "hashedPasswordXYZ";
-    private final String generatedToken = "generatedJwtToken123";
 
     @BeforeEach
     void setUp() {
-
         authenticationRequest = new AuthenticationRequest("testuser@example.com", rawPassword);
 
         userModel = new UserModel();
@@ -48,7 +41,6 @@ class AuthenticationUseCaseTest {
         userModel.setEmail("testuser@example.com");
         userModel.setPassword(hashedPassword);
         userModel.setRole("USER");
-
     }
 
     @Test
@@ -59,36 +51,33 @@ class AuthenticationUseCaseTest {
         when(passwordEncoderPort.matches(rawPassword, hashedPassword))
                 .thenReturn(true);
 
-        when(authenticationPersistencePort.generateToken(userModel))
-                .thenReturn(generatedToken);
-
-
-        AuthenticationResponse response = authenticationUseCase.authenticate(authenticationRequest);
+        UserModel returnedUser = authenticationUseCase.authenticate(authenticationRequest);
 
         verify(userPersistencePort).getUserByEmail(authenticationRequest.email());
         verify(passwordEncoderPort).matches(rawPassword, hashedPassword);
-        verify(authenticationPersistencePort).generateToken(userModel);
 
-        assertNotNull(response);
-        assertEquals(generatedToken, response.token());
+        assertNotNull(returnedUser);
+        assertEquals(userModel.getId(), returnedUser.getId());
+        assertEquals(userModel.getEmail(), returnedUser.getEmail());
+        assertEquals(userModel.getPassword(), returnedUser.getPassword());
+        assertEquals(userModel.getRole(), returnedUser.getRole());
     }
 
     @Test
     void testAuthenticate_userNotFound_throwsInvalidCredentialsException() {
         when(userPersistencePort.getUserByEmail(authenticationRequest.email()))
-                .thenReturn(null); // User not found
+                .thenReturn(null);
 
         assertThrows(InvalidCredentialsException.class, () -> {
             authenticationUseCase.authenticate(authenticationRequest);
         });
 
         verify(userPersistencePort).getUserByEmail(authenticationRequest.email());
-        verifyNoMoreInteractions(passwordEncoderPort, authenticationPersistencePort); // Ensure other mocks were not called
+        verifyNoMoreInteractions(passwordEncoderPort);
     }
 
     @Test
     void testAuthenticate_incorrectPassword_throwsInvalidCredentialsException() {
-
         when(userPersistencePort.getUserByEmail(authenticationRequest.email()))
                 .thenReturn(userModel);
 
@@ -101,6 +90,5 @@ class AuthenticationUseCaseTest {
 
         verify(userPersistencePort).getUserByEmail(authenticationRequest.email());
         verify(passwordEncoderPort).matches(rawPassword, hashedPassword);
-        verifyNoMoreInteractions(authenticationPersistencePort);
     }
 }

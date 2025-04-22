@@ -5,6 +5,7 @@ import com.hogar360.users.users.application.dto.request.SaveUserRequest;
 import com.hogar360.users.users.application.dto.response.SaveUserResponse;
 import com.hogar360.users.users.application.mappers.UserDtoMapper;
 import com.hogar360.users.users.application.services.UserService;
+import com.hogar360.users.users.domain.ports.in.RoleValidatorPort;
 import com.hogar360.users.users.domain.ports.in.UserServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ import java.time.LocalDateTime;
 public class UserServiceImpl implements UserService {
     private final UserServicePort userServicePort;
     private final UserDtoMapper userDtoMapper;
+    private final RoleValidatorPort roleValidatorPort;
 
     @Override
     public SaveUserResponse save(SaveUserRequest request, String token) {
-        userServicePort.registerUser(userDtoMapper.requestToModel(request), token);
+        String role = roleValidatorPort.extractRole(token);
+        userServicePort.registerUser(userDtoMapper.requestToModel(request), role);
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
     }
 }

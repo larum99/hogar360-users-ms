@@ -2,7 +2,6 @@ package com.hogar360.users.users.domain.usecases;
 
 import com.hogar360.users.users.domain.exceptions.*;
 import com.hogar360.users.users.domain.model.UserModel;
-import com.hogar360.users.users.domain.ports.in.RoleValidatorPort;
 import com.hogar360.users.users.domain.ports.in.UserServicePort;
 import com.hogar360.users.users.domain.ports.out.PasswordEncoderPort;
 import com.hogar360.users.users.domain.ports.out.UserPersistencePort;
@@ -16,33 +15,32 @@ import java.util.Objects;
 public class UserUseCase implements UserServicePort {
     private final UserPersistencePort userPersistencePort;
     private final PasswordEncoderPort passwordEncoderPort;
-    private final RoleValidatorPort roleValidatorPort;
 
-    public UserUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoderPort, RoleValidatorPort roleValidatorPort) {
+    public UserUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoderPort) {
         this.userPersistencePort = userPersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
-        this.roleValidatorPort = roleValidatorPort;
     }
 
     @Override
-    public void registerUser(UserModel userModel, String token) {
-        validateRole(token);
+    public void registerUser(UserModel userModel, String role) {
+        validateRole(role);
         validateMandatoryFields(userModel);
         validateEmail(userModel.getEmail());
         validatePhone(userModel.getPhoneNumber());
         validateDocument(userModel.getIdentityDocument());
         validateAge(userModel.getBirthDate());
+
         checkIfUserAlreadyExists(userModel.getEmail());
 
         String encryptedPassword = passwordEncoderPort.encode(userModel.getPassword());
         userModel.setPassword(encryptedPassword);
+
         userModel.setRole(DomainConstants.DEFAULT_USER_ROLE);
 
         userPersistencePort.saveUser(userModel);
     }
 
-    private void validateRole(String token) {
-        String role = roleValidatorPort.extractRole(token);
+    private void validateRole(String role) {
         if (!DomainConstants.ROLE_ADMIN.equals(role)) {
             throw new ForbiddenException();
         }
