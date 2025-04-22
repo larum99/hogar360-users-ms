@@ -11,7 +11,6 @@ import com.hogar360.users.users.infrastructure.adapters.persistence.UserPersiste
 import com.hogar360.users.users.infrastructure.mappers.UserEntityMapper;
 import com.hogar360.users.users.infrastructure.repositories.mysql.UserRepository;
 import com.hogar360.users.users.infrastructure.adapters.encoders.PasswordEncoderAdapter;
-import com.hogar360.users.users.infrastructure.security.JwtRoleValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +21,11 @@ public class BeanConfiguration {
 
     private final UserRepository userRepository;
     private final UserEntityMapper userEntityMapper;
-    private final AuthenticationPersistenceAdapter authenticationPersistenceAdapter;
-    private final JwtRoleValidator jwtRoleValidator;
 
 
     @Bean
     public UserServicePort userServicePort() {
-        return new UserUseCase(userPersistencePort(), passwordEncoderPort(), jwtRoleValidator);
+        return new UserUseCase(userPersistencePort(), passwordEncoderPort());
     }
 
     @Bean
@@ -43,7 +40,7 @@ public class BeanConfiguration {
 
     @Bean
     public AuthenticationServicePort authenticationServicePort() {
-        return new AuthenticationUseCase(userPersistencePort(), passwordEncoderPort(), authenticationPersistenceAdapter);
+        return new AuthenticationUseCase(userPersistencePort(), passwordEncoderPort());
     }
 
 }

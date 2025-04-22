@@ -4,7 +4,7 @@ import com.hogar360.users.commons.configurations.config.AuthControllerDocs.Login
 import com.hogar360.users.commons.configurations.config.ControllerConstants;
 import com.hogar360.users.users.application.dto.request.AuthenticationRequest;
 import com.hogar360.users.users.application.dto.response.AuthenticationResponse;
-import com.hogar360.users.users.domain.ports.in.AuthenticationServicePort;
+import com.hogar360.users.users.application.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationServicePort authenticationServicePort;
+    private final AuthenticationService authenticationService;
 
     @LoginDocs
     @PostMapping(ControllerConstants.LOGIN_PATH)
     public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
-        return authenticationServicePort.authenticate(authenticationRequest);
+        return authenticationService.authenticate(authenticationRequest);
+
     }
 }

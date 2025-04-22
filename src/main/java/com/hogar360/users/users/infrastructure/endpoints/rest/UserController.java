@@ -5,7 +5,6 @@ import com.hogar360.users.commons.configurations.config.UserControllerDocs.Creat
 import com.hogar360.users.users.application.dto.request.SaveUserRequest;
 import com.hogar360.users.users.application.dto.response.SaveUserResponse;
 import com.hogar360.users.users.application.services.UserService;
-import com.hogar360.users.users.infrastructure.security.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
