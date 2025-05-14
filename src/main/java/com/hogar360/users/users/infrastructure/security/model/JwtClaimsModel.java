@@ -8,4 +8,5 @@ import lombok.Getter;
 public class JwtClaimsModel {
     private String email;
     private String role;
+    private Long id;
 }

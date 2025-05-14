@@ -29,11 +29,12 @@ public class JwtUtil {
     }
 
     public String generateToken(UserModel user) {
-        JwtClaimsModel claims = new JwtClaimsModel(user.getEmail(), user.getRole());
+        JwtClaimsModel claims = new JwtClaimsModel(user.getEmail(), user.getRole(), user.getId());
 
         return Jwts.builder()
                 .claim(SecurityConstants.EMAIL_CLAIM, claims.getEmail())
                 .claim(SecurityConstants.ROLE_CLAIM, claims.getRole())
+                .claim(SecurityConstants.ID_CLAIM, claims.getId())
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
@@ -55,6 +56,10 @@ public class JwtUtil {
 
     public String extractRole(String token) {
         return extractClaims(token).get(SecurityConstants.ROLE_CLAIM, String.class);
+    }
+
+    public Long extractId(String token) {
+        return extractClaims(token).get(SecurityConstants.ID_CLAIM, Long.class);
     }
 
     private Date generateExpirationDate() {

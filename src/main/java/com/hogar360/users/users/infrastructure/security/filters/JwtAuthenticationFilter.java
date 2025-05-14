@@ -33,12 +33,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = null;
         String email = null;
         String role = null;
+        Long userId = null;
 
         if (authorizationHeader != null && authorizationHeader.startsWith(SecurityConstants.BEARER_PREFIX)) {
             token = authorizationHeader.substring(SecurityConstants.BEARER_PREFIX.length());
             try {
                 email = jwtUtil.extractEmail(token);
                 role = jwtUtil.extractRole(token);
+                userId = jwtUtil.extractId(token);
             } catch (ExpiredJwtException e) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.setContentType(ResponseConstants.CONTENT_TYPE_JSON);
