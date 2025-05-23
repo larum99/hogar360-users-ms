@@ -30,4 +30,10 @@ public class UserPersistenceAdapter implements UserPersistencePort {
         Optional<UserEntity> optionalEntity = userRepository.findByEmail(email);
         return userEntityMapper.optionalEntityToModel(optionalEntity);
     }
+
+    @Override
+    public UserModel getUserByDocument(String identityDocument) {
+        Optional<UserEntity> optionalEntity = userRepository.findByIdentityDocument(identityDocument);
+        return userEntityMapper.optionalEntityToModel(optionalEntity);
+    }
 }

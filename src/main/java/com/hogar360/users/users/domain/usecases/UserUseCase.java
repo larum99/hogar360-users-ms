@@ -30,6 +30,8 @@ public class UserUseCase implements UserServicePort {
         validateDocument(userModel.getIdentityDocument());
         validateAge(userModel.getBirthDate());
 
+        checkIfDocumentAlreadyExists(userModel.getIdentityDocument());
+
         checkIfUserAlreadyExists(userModel.getEmail());
 
         String encryptedPassword = passwordEncoderPort.encode(userModel.getPassword());
@@ -79,6 +81,13 @@ public class UserUseCase implements UserServicePort {
         int age = Period.between(birthDate, LocalDate.now()).getYears();
         if (age < DomainConstants.MIN_AGE) {
             throw new UnderAgeUserException();
+        }
+    }
+
+    private void checkIfDocumentAlreadyExists(String identityDocument) {
+        UserModel existingUser = userPersistencePort.getUserByDocument(identityDocument);
+        if (existingUser != null) {
+            throw new DuplicateDocumentException();
         }
     }
 
