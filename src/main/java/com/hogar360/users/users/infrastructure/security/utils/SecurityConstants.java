@@ -23,7 +23,10 @@ public class SecurityConstants {
     public static final String API_DOCS_PATH = "/api-docs/**";
     public static final String API_DOCS_PATH_NO_SLASH = "/api-docs";
 
-    public static final String ALLOWED_ORIGIN = "http://localhost:8091";
+    public static final List<String> ALLOWED_ORIGINS = List.of(
+            "http://localhost:4200",
+            "http://localhost:8091"
+    );
     public static final List<String> ALLOWED_METHODS = List.of("GET", "POST", "PUT", "DELETE");
     public static final List<String> ALLOWED_HEADERS = List.of("*");
 
