@@ -10,5 +10,5 @@ public class RegexUtils {
             Pattern.compile("^\\d+$");
 
     public static final Pattern PHONE_PATTERN =
-            Pattern.compile("^\\+?[0-9]{7,15}$"); // Ejemplo de patrón para teléfonos
+            Pattern.compile("^\\+?[0-9]{7,15}$");
 }

@@ -11,4 +11,8 @@ public class ControllerConstants {
     public static final String TAG = "Usuarios";
     public static final String TAG_DESCRIPTION = "Operaciones relacionadas con los usuarios";
     public static final String LOGIN_PATH = "/auth/login";
+    public static final String ROLE_ADMIN = "hasRole('ADMIN')";
+    public static final String BEARER_PREFIX = "Bearer ";
+    public static final String GET_USER_BY_ID_PATH = "/{id}";
 }
+

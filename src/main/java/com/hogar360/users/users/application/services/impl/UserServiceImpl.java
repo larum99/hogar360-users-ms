@@ -3,8 +3,10 @@ package com.hogar360.users.users.application.services.impl;
 import com.hogar360.users.commons.configurations.utils.Constants;
 import com.hogar360.users.users.application.dto.request.SaveUserRequest;
 import com.hogar360.users.users.application.dto.response.SaveUserResponse;
+import com.hogar360.users.users.application.dto.response.UserSimpleResponse;
 import com.hogar360.users.users.application.mappers.UserDtoMapper;
 import com.hogar360.users.users.application.services.UserService;
+import com.hogar360.users.users.domain.model.UserModel;
 import com.hogar360.users.users.domain.ports.in.RoleValidatorPort;
 import com.hogar360.users.users.domain.ports.in.UserServicePort;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +26,11 @@ public class UserServiceImpl implements UserService {
         String role = roleValidatorPort.extractRole(token);
         userServicePort.registerUser(userDtoMapper.requestToModel(request), role);
         return new SaveUserResponse(Constants.SAVE_USER_RESPONSE_MESSAGE, LocalDateTime.now());
+    }
+
+    @Override
+    public UserSimpleResponse getUserById(Long id) {
+        UserModel userModel = userServicePort.getUserById(id);
+        return new UserSimpleResponse(userModel.getId(), userModel.getFirstName(), userModel.getLastName());
     }
 }

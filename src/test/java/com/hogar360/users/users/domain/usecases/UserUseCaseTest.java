@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -49,28 +50,29 @@ class UserUseCaseTest {
 
     @Test
     void registerUser_WithAdminRole_ShouldProceedWithRegistration() {
-        when(userPersistencePort.getUserByEmail(validUserModel.getEmail())).thenReturn(null);
+        when(userPersistencePort.getUserByEmail(validUserModel.getEmail())).thenReturn(Optional.empty());
+        when(userPersistencePort.getUserByDocument(validUserModel.getIdentityDocument())).thenReturn(Optional.empty());
         when(passwordEncoderPort.encode(validUserModel.getPassword())).thenReturn("encryptedPassword");
 
         userUseCase.registerUser(validUserModel, ROLE_ADMIN);
 
         verify(passwordEncoderPort).encode("password123");
         verify(userPersistencePort).getUserByEmail(validUserModel.getEmail());
+        verify(userPersistencePort).getUserByDocument(validUserModel.getIdentityDocument());
         verify(userPersistencePort).saveUser(any(UserModel.class));
     }
 
     @Test
     void registerUser_WithNonAdminRole_ShouldThrowForbiddenExceptionAndNotSaveUser() {
         assertThrows(ForbiddenException.class, () -> userUseCase.registerUser(validUserModel, ROLE_USER));
-
-        verify(userPersistencePort, never()).saveUser(any(UserModel.class));
-        verify(passwordEncoderPort, never()).encode(anyString());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
     void registerUser_ValidUserWithAdminRole_ShouldSaveUserWithEncryptedPasswordAndDefaultRole() {
-        when(userPersistencePort.getUserByEmail(validUserModel.getEmail())).thenReturn(null);
+        when(userPersistencePort.getUserByEmail(validUserModel.getEmail())).thenReturn(Optional.empty());
+        when(userPersistencePort.getUserByDocument(validUserModel.getIdentityDocument())).thenReturn(Optional.empty());
         when(passwordEncoderPort.encode(validUserModel.getPassword())).thenReturn("encryptedPassword");
 
         userUseCase.registerUser(validUserModel, ROLE_ADMIN);
@@ -83,6 +85,7 @@ class UserUseCaseTest {
         assertEquals(DomainConstants.DEFAULT_USER_ROLE, savedUser.getRole());
         verify(passwordEncoderPort).encode("password123");
         verify(userPersistencePort).getUserByEmail(validUserModel.getEmail());
+        verify(userPersistencePort).getUserByDocument(validUserModel.getIdentityDocument());
     }
 
     @Test
@@ -93,7 +96,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_FIRSTNAME, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -104,7 +108,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_LASTNAME, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -115,7 +120,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_DOCUMENT, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -126,7 +132,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_PHONE, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -137,7 +144,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_BIRTHDATE, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -148,7 +156,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_EMAIL, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -159,7 +168,8 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         assertEquals(DomainConstants.ERROR_REQUIRED_PASSWORD, exception.getMessage());
-        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(userPersistencePort);
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -170,6 +180,7 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -180,6 +191,7 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -190,6 +202,7 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -200,6 +213,7 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
@@ -210,16 +224,64 @@ class UserUseCaseTest {
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
         verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verify(userPersistencePort, never()).getUserByDocument(anyString());
+        verifyNoInteractions(passwordEncoderPort);
     }
 
     @Test
-    void registerUser_UserAlreadyExists_ShouldThrowUserAlreadyExistsException() {
-        when(userPersistencePort.getUserByEmail(validUserModel.getEmail())).thenReturn(new UserModel());
+    void registerUser_DocumentAlreadyExists_ShouldThrowDuplicateDocumentException() {
+        when(userPersistencePort.getUserByDocument(validUserModel.getIdentityDocument())).thenReturn(Optional.of(new UserModel()));
+
+        assertThrows(DuplicateDocumentException.class,
+                () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
+
+        verify(userPersistencePort).getUserByDocument(validUserModel.getIdentityDocument());
+        verify(userPersistencePort, never()).getUserByEmail(anyString());
+        verify(userPersistencePort, never()).saveUser(any(UserModel.class));
+        verifyNoInteractions(passwordEncoderPort);
+    }
+
+    @Test
+    void registerUser_UserAlreadyExistsByEmail_ShouldThrowUserAlreadyExistsException() {
+        when(userPersistencePort.getUserByDocument(validUserModel.getIdentityDocument())).thenReturn(Optional.empty()); // FIX
+        when(userPersistencePort.getUserByEmail(validUserModel.getEmail())).thenReturn(Optional.of(new UserModel()));
 
         assertThrows(UserAlreadyExistsException.class,
                 () -> userUseCase.registerUser(validUserModel, ROLE_ADMIN));
 
+        verify(userPersistencePort).getUserByDocument(validUserModel.getIdentityDocument());
         verify(userPersistencePort).getUserByEmail(validUserModel.getEmail());
         verify(userPersistencePort, never()).saveUser(any(UserModel.class));
+        verifyNoInteractions(passwordEncoderPort);
+    }
+
+    @Test
+    void getUserById_ValidId_ShouldReturnUserModel() {
+        Long userId = 1L;
+        UserModel expectedUser = new UserModel();
+        expectedUser.setId(userId);
+        expectedUser.setFirstName("Test");
+
+        when(userPersistencePort.getUserById(userId)).thenReturn(Optional.of(expectedUser));
+
+        UserModel actualUser = userUseCase.getUserById(userId);
+
+        assertNotNull(actualUser);
+        assertEquals(expectedUser.getId(), actualUser.getId());
+        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+        verify(userPersistencePort).getUserById(userId);
+    }
+
+    @Test
+    void getUserById_UserNotFound_ShouldThrowUserNotFoundException() {
+        Long userId = 99L;
+
+        when(userPersistencePort.getUserById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> {
+            userUseCase.getUserById(userId);
+        });
+
+        verify(userPersistencePort).getUserById(userId);
     }
 }

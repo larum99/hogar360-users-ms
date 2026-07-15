@@ -9,4 +9,6 @@ public class ExceptionConstants {
     public static final String USER_ALREADY_EMAIL_EXISTS_MESSAGE = "A user with this email already exists.";
     public static final String USER_ALREADY_DOCUMENTID_EXISTS_MESSAGE = "A user with this DocumentID already exists.";
     public static final String FORBIDDEN_MESSAGE = "Access denied: insufficient permissions.";
+    public static final String INVALID_CREDENTIALS_MESSAGE = "Invalid email or password.";
+    public static final String USER_NOT_FOUND_MESSAGE = "User not found.";
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,14 +27,35 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     }
 
     @Override
-    public UserModel getUserByEmail(String email) {
-        Optional<UserEntity> optionalEntity = userRepository.findByEmail(email);
-        return userEntityMapper.optionalEntityToModel(optionalEntity);
+    public Optional<UserModel> getUserByEmail(String email) {
+        Optional<UserEntity> entityOpt = userRepository.findByEmail(email);
+        if (entityOpt.isPresent()) {
+            UserModel model = userEntityMapper.entityToModel(entityOpt.get());
+            return Optional.of(model);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public UserModel getUserByDocument(String identityDocument) {
-        Optional<UserEntity> optionalEntity = userRepository.findByIdentityDocument(identityDocument);
-        return userEntityMapper.optionalEntityToModel(optionalEntity);
+    public Optional<UserModel> getUserByDocument(String identityDocument) {
+        Optional<UserEntity> entityOpt = userRepository.findByIdentityDocument(identityDocument);
+        if (entityOpt.isPresent()) {
+            UserModel model = userEntityMapper.entityToModel(entityOpt.get());
+            return Optional.of(model);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<UserModel> getUserById(Long id) {
+        Optional<UserEntity> entityOpt = userRepository.findById(id);
+        if (entityOpt.isPresent()) {
+            UserModel model = userEntityMapper.entityToModel(entityOpt.get());
+            return Optional.of(model);
+        } else {
+            return Optional.empty();
+        }
     }
 }

@@ -67,4 +67,19 @@ public class ControllerAdvisor {
         ));
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCredentials(InvalidCredentialsException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(
+                ExceptionConstants.INVALID_CREDENTIALS_MESSAGE,
+                LocalDateTime.now()
+        ));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFound(UserNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
+                ExceptionConstants.USER_NOT_FOUND_MESSAGE,
+                LocalDateTime.now()
+        ));
+    }
 }

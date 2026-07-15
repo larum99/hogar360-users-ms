@@ -22,6 +22,7 @@ public class SecurityConstants {
     public static final String SWAGGER_UI_HTML_PATH = "/swagger-ui.html";
     public static final String API_DOCS_PATH = "/api-docs/**";
     public static final String API_DOCS_PATH_NO_SLASH = "/api-docs";
+    public static final String GET_USER_BY_ID_PATH = "/api/v1/users/*";
 
     public static final List<String> ALLOWED_ORIGINS = List.of(
             "http://localhost:4200",

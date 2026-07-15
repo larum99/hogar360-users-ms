@@ -11,6 +11,7 @@ import com.hogar360.users.users.domain.utils.RegexUtils;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
+import java.util.Optional;
 
 public class UserUseCase implements UserServicePort {
     private final UserPersistencePort userPersistencePort;
@@ -40,6 +41,16 @@ public class UserUseCase implements UserServicePort {
         userModel.setRole(DomainConstants.DEFAULT_USER_ROLE);
 
         userPersistencePort.saveUser(userModel);
+    }
+
+    @Override
+    public UserModel getUserById(Long id) {
+        Optional<UserModel> userOpt = userPersistencePort.getUserById(id);
+        if (userOpt.isPresent()) {
+            return userOpt.get();
+        } else {
+            throw new UserNotFoundException();
+        }
     }
 
     private void validateRole(String role) {
@@ -85,17 +96,16 @@ public class UserUseCase implements UserServicePort {
     }
 
     private void checkIfDocumentAlreadyExists(String identityDocument) {
-        UserModel existingUser = userPersistencePort.getUserByDocument(identityDocument);
-        if (existingUser != null) {
+        Optional<UserModel> existingUser = userPersistencePort.getUserByDocument(identityDocument);
+        if (existingUser.isPresent()) {
             throw new DuplicateDocumentException();
         }
     }
 
     private void checkIfUserAlreadyExists(String email) {
-        UserModel existingUser = userPersistencePort.getUserByEmail(email);
-        if (existingUser != null) {
+        Optional<UserModel> existingUser = userPersistencePort.getUserByEmail(email);
+        if (existingUser.isPresent()) {
             throw new UserAlreadyExistsException();
         }
     }
-
 }

@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -46,7 +48,7 @@ class AuthenticationUseCaseTest {
     @Test
     void testAuthenticate_successful() {
         when(userPersistencePort.getUserByEmail(authenticationRequest.email()))
-                .thenReturn(userModel);
+                .thenReturn(Optional.of(userModel));
 
         when(passwordEncoderPort.matches(rawPassword, hashedPassword))
                 .thenReturn(true);
@@ -66,7 +68,7 @@ class AuthenticationUseCaseTest {
     @Test
     void testAuthenticate_userNotFound_throwsInvalidCredentialsException() {
         when(userPersistencePort.getUserByEmail(authenticationRequest.email()))
-                .thenReturn(null);
+                .thenReturn(Optional.empty());
 
         assertThrows(InvalidCredentialsException.class, () -> {
             authenticationUseCase.authenticate(authenticationRequest);
@@ -79,7 +81,7 @@ class AuthenticationUseCaseTest {
     @Test
     void testAuthenticate_incorrectPassword_throwsInvalidCredentialsException() {
         when(userPersistencePort.getUserByEmail(authenticationRequest.email()))
-                .thenReturn(userModel);
+                .thenReturn(Optional.of(userModel));
 
         when(passwordEncoderPort.matches(rawPassword, hashedPassword))
                 .thenReturn(false);

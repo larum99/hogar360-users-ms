@@ -14,8 +14,7 @@ public class SwaggerExamples {
           "phoneNumber": "3001234567",
           "birthDate": "1992-08-15",
           "email": "maria.gonzalez@example.com",
-          "password": "securePassword123",
-          "role": "CLIENT"
+          "password": "securePassword123"
         }
     """;
 

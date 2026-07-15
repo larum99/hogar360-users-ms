@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 SecurityConstants.USERS_AUTH_PATH,
+                                SecurityConstants.GET_USER_BY_ID_PATH,
                                 SecurityConstants.CATEGORY_PATH,
                                 SecurityConstants.SWAGGER_UI_PATH,
                                 SecurityConstants.SWAGGER_UI_HTML_PATH,

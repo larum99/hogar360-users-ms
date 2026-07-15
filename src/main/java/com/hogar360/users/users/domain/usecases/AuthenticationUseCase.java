@@ -6,15 +6,18 @@ import com.hogar360.users.users.domain.model.UserModel;
 import com.hogar360.users.users.domain.ports.in.AuthenticationServicePort;
 import com.hogar360.users.users.domain.ports.out.PasswordEncoderPort;
 import com.hogar360.users.users.domain.ports.out.UserPersistencePort;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class AuthenticationUseCase implements AuthenticationServicePort {
 
     private final UserPersistencePort userPersistencePort;
     private final PasswordEncoderPort passwordEncoderPort;
+
+    public AuthenticationUseCase(UserPersistencePort userPersistencePort, PasswordEncoderPort passwordEncoderPort) {
+        this.userPersistencePort = userPersistencePort;
+        this.passwordEncoderPort = passwordEncoderPort;
+    }
 
     @Override
     public UserModel authenticate(AuthenticationRequest authenticationRequest) {
@@ -22,7 +25,7 @@ public class AuthenticationUseCase implements AuthenticationServicePort {
     }
 
     private UserModel validateCredentials(AuthenticationRequest authenticationRequest) {
-        Optional<UserModel> optionalUser = Optional.ofNullable(userPersistencePort.getUserByEmail(authenticationRequest.email()));
+        Optional<UserModel> optionalUser = userPersistencePort.getUserByEmail(authenticationRequest.email());
         UserModel user = optionalUser.orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordEncoderPort.matches(authenticationRequest.password(), user.getPassword())) {
